@@ -2,20 +2,15 @@ package com.bblach;
 
 import java.util.Scanner;
 
-import com.bblach.lists.ProductsList;
-import com.bblach.productManagament.ProductManagament;
-import com.bblach.products.CarbProduct;
-import com.bblach.products.FatProduct;
-import com.bblach.products.ProteinProduct;
 
-/**
- * Hello world!
- *
- */
+import com.bblach.productManagament.ProductManagament;
+
+
 public class App {
     private static Scanner keybordInput = new Scanner(System.in);
+    private static ProductManagament productManagament = new ProductManagament();
     public static void main(String[] args) {
-        ProductManagament.loadData();
+    	productManagament.loadData();
         printMenu();
         menu();
     }
@@ -26,7 +21,9 @@ public class App {
         System.out.println("2 - to list products");
         System.out.println("3 - to add product");
         System.out.println("4 - to remove product");
-        System.out.println("5 - to quit");
+        System.out.println("5 - to add a meal");
+        System.out.println("6 - to list  meals");
+        System.out.println("7 - to quit");
         // System.out.print(": ");
     }
 
@@ -44,20 +41,26 @@ public class App {
                     break;
                 }
                 case 2 : { // LSIT
-                    ProductManagament.printProducts();
+                    productManagament.printProducts();
 
                     break;
                 }
                 case 3 : { // ADD
-                    ProductManagament.addProduct();
+                	productManagament.addProduct(productManagament.createproduct());
 
                     break;
                 }
                 case 4 : { // REMOVE
-                    ProductManagament.removeProduct();
+                	productManagament.removeProduct();
                     break;
                 }
-                case 5 : {// QUIT
+                case 5 : {// add meal
+                	/*MealsManagament.addToMeals();*/
+                }
+                case 6 : {// list meal
+                    status = false;
+                }
+                case 7 : {// QUIT
                     status = false;
                 }
 

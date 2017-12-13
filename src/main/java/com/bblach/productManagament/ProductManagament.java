@@ -1,123 +1,120 @@
 package com.bblach.productManagament;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-import com.bblach.lists.ProductsList;
 import com.bblach.products.CarbProduct;
 import com.bblach.products.FatProduct;
+import com.bblach.products.Product;
 import com.bblach.products.ProteinProduct;
 
 public class ProductManagament {
-    private static ProductsList<ProteinProduct> proteinsList = new ProductsList<>(
-            "Sources of Proteins");
-    private static ProductsList<CarbProduct> carbsList = new ProductsList<>(
-            "Sources of Proteins");
-    private static ProductsList<FatProduct> fatsList = new ProductsList<>(
-            "Sources of Proteins");
-    private static Scanner keybordInput = new Scanner(System.in);
 
-    public static boolean addProduct() {
-        String type = selectType();
-        if (type != null) {
+	private List<Product> products;
+	Scanner in = new Scanner(System.in);
 
-            System.out.print("Product name: ");
-            String name = keybordInput.nextLine();
+	public ProductManagament() {
 
-            System.out.print("Proteins: ");
-            double proteins = keybordInput.nextDouble();
-            System.out.print("Fats: ");
-            double fats = keybordInput.nextDouble();
-            System.out.print("Carbs: ");
-            double carbs = keybordInput.nextDouble();
+		this.products = new ArrayList<>();
+	}
 
-            if (type.equals("fats")) {
-                FatProduct newFatProduct = new FatProduct(name, proteins, carbs,
-                        fats);
+	public Product createproduct() {
+		System.out.print("Select type of the product (fat/carb/protein) : ");
+		String type = in.nextLine();
+		
+		String name = null;
+		while (name == null){
+			System.out.print("Enter name : ");
+			 name = in.nextLine();
+				if (findProduct(name) != -1){
+					System.out.println("Product already on the list");
+					name =null;
+				}else if (name.equals("return")){
+					return null;
+				}
+		}
+		
+		
 
-                fatsList.addProduct(newFatProduct);
-                keybordInput.nextLine();
-                return true;
-            } else if (type.equals("carbs")) {
-                CarbProduct newCarbProduct = new CarbProduct(name, proteins,
-                        carbs, fats);
+		System.out.print("Enter proteins : ");
+		Double proteins = in.nextDouble();
+		System.out.print("Enter carbs : ");
+		Double carbs = in.nextDouble();
+		System.out.print("Enter fats : ");
+		Double fats = in.nextDouble();
 
-                carbsList.addProduct(newCarbProduct);
-                keybordInput.nextLine();
-                return true;
-            } else if (type.equals("protein")) {
-                ProteinProduct newProteinProduct = new ProteinProduct(name,
-                        proteins, carbs, fats);
+		in.nextLine();
+		if (type.equals("fat")) {
 
-                proteinsList.addProduct(newProteinProduct);
-                keybordInput.nextLine();
-                return true;
-            }
-        }
-        keybordInput.nextLine();
-        return false;
+			return new ProteinProduct(name, proteins, carbs, fats);
+		} else if (type.equals("carb")) {
+			return new ProteinProduct(name, proteins, carbs, fats);
+		} else {
+			return new ProteinProduct(name, proteins, carbs, fats);
+		}
 
-    }
-    public static boolean printProducts() {
-        String type = selectType();
-        if (type != null) {
-            if (type.equals("fats")) {
-                System.out.println("Size: " + fatsList.getProducts().size());
-                fatsList.printProducts();
-                return true;
-            } else if (type.equals("carbs")) {
-                System.out.println("Size: " + carbsList.getProducts().size());
-                carbsList.printProducts();
-                return true;
-            } else {
-                System.out
-                        .println("Size: " + proteinsList.getProducts().size());
-                proteinsList.printProducts();
-                return true;
-            }
+	}
 
-        }
+	public boolean addProduct(Product newProduct) {
 
-        return false;
-    }
-    public static String selectType() {
+		if (products.contains(newProduct)) {
+			System.out.println(newProduct.getName() + " already on the list");
+			return false;
+		}
+		products.add(newProduct);
+		return true;
+	}
 
-        System.out.print("Select type: ");
-        String inputType = keybordInput.nextLine();
-        String[] avaibleTypes = {"fats", "carbs", "proteins"};
-        for (String availableType : avaibleTypes) {
-            if (availableType.equals(inputType)) {
-                return availableType;
-            }
-        }
-        System.out.println("Wrong type");
-        return null;
+	public boolean removeProduct() {
+		System.out.print("Enter product to remove : ");
+		String name = in.nextLine();
+		int indexOfSearchedProduct = findProduct(name);
+		if (indexOfSearchedProduct == -1) {
+			return false;
+		}
+		products.remove(indexOfSearchedProduct);
+		return true;
 
-    }
-    public static boolean removeProduct() {
-        String type = selectType();
-        if (type != null) {
-            System.out.println("Which product to delete: ");
-            String productToRemove = keybordInput.nextLine();
+	}
 
-            if (type.equals("fats")) {
-                fatsList.removeProduct(productToRemove);
-                return true;
-            } else if (type.equals("carbs")) {
-                carbsList.removeProduct(productToRemove);
-                return true;
-            } else if (type.equals("protein")) {
-                proteinsList.removeProduct(productToRemove);
-                return true;
-            }
-            System.out.println("No such category");
-            return false;
-        }
-        return false;
-    }
-    public static void loadData() {
-        fatsList.addProduct(new FatProduct("olive oil", 1, 2, 19));
-        fatsList.addProduct(new FatProduct("butter", 2, 3, 14));
-        fatsList.addProduct(new FatProduct("coconut oil", 3, 3, 23));
+	public void printProducts() {
+		int couter = 1;
 
-    }
+		for (Product product : products) {
+			System.out.println(couter++ + ". " + product);
+		}
+	}
+
+	public int findProduct(String name) {
+		for (Product product : products) {
+			if (product.getName().equals(name)) {
+				return products.indexOf(product);
+			}
+		}
+		return -1;
+	}
+
+	public void loadData() {
+		Product bread = new CarbProduct("bread", 2, 19, 1);
+		Product rice = new CarbProduct("rice", 1, 20, 1);
+		Product butter = new FatProduct("butter", 2, 1, 17);
+		Product olive = new FatProduct("olive oil", 3, 2, 20);
+		Product chickenBreast = new ProteinProduct("chicken breast", 18, 5, 5);
+		Product beaf = new ProteinProduct("beaf", 28, 5, 5);
+
+		this.addProduct(beaf);
+		this.addProduct(chickenBreast);
+		this.addProduct(olive);
+		this.addProduct(butter);
+		this.addProduct(rice);
+		this.addProduct(bread);
+		this.addProduct(beaf);
+
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
 }

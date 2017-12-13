@@ -6,6 +6,7 @@ public abstract class Product {
     private double proteins;
     private double carbs;
     private double fats;
+    private double calories;
     
     public Product(String name, double proteins, double carbs, double fats) {
         super();
@@ -13,8 +14,10 @@ public abstract class Product {
         this.proteins = proteins;
         this.carbs = carbs;
         this.fats = fats;
+        this.calories=4*this.proteins+4*this.carbs+9*this.fats;
     }
-
+    
+  
     public String getName() {
         return name;
     }
@@ -46,11 +49,17 @@ public abstract class Product {
     public void setFats(double fats) {
         this.fats = fats;
     }
+    
+    
+	public double getCalories() {
+		return calories;
+	}
 
-    @Override
+
+	@Override
     public String toString() {
         return "Product [name=" + name + ", proteins=" + proteins + ", carbs="
-                + carbs + ", fats=" + fats + "]";
+                + carbs + ", fats=" + fats + ", calories= " + this.calories + "]";
     }
 
     public static String getProductDescription() {
