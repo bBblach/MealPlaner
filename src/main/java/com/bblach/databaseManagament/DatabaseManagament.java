@@ -50,11 +50,12 @@ public class DatabaseManagament {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + TABLE_PRODUCTS);){
 			List<Product> products = new ArrayList<>();
 			while (results.next()){
-				
+				return products;
 			}
 		}catch(SQLException e){
 			e.getMessage();
 		}
+		return null;
 	}
 	
 	
